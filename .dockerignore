@@ -1,0 +1,13 @@
+.env
+.git
+.venv
+.tools
+.npm-cache
+__pycache__
+*.py[cod]
+*.log
+inspector-config.json
+run-inspector.ps1
+start-moodle-mcp.cmd
+deploy-container-app.ps1
+README.md

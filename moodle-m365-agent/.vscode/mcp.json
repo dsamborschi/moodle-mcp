@@ -1,0 +1,8 @@
+{
+  "servers": {
+    "moodlemcpo": {
+      "type": "http",
+      "url": "https://moodle-mcp.orangemushroom-693af788.canadacentral.azurecontainerapps.io/mcp"
+    }
+  }
+}

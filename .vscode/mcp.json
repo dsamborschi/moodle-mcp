@@ -1,0 +1,19 @@
+{
+  "inputs": [
+    {
+      "id": "moodle-mcp-auth-token",
+      "type": "promptString",
+      "description": "Moodle MCP bearer token (MCP_AUTH_TOKEN)",
+      "password": true
+    }
+  ],
+  "servers": {
+    "moodle": {
+      "type": "http",
+      "url": "https://moodle-mcp.orangemushroom-693af788.canadacentral.azurecontainerapps.io/mcp",
+      "headers": {
+        "Authorization": "Bearer ${input:moodle-mcp-auth-token}"
+      }
+    }
+  }
+}

@@ -1,0 +1,581 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/copilot/plugin/v2.4/schema.json",
+    "schema_version": "v2.4",
+    "name_for_human": "moodle-m365-agent",
+    "description_for_human": "moodle-m365-agent${{APP_NAME_SUFFIX}}",
+    "contact_email": "publisher-email@example.com",
+    "namespace": "moodlemcpo",
+    "functions": [
+        {
+            "name": "get_site_info",
+            "description": "Get information about the Moodle site including version, user details, and available functions.",
+            "parameters": {
+                "properties": {},
+                "title": "get_site_infoArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "get_courses",
+            "description": "Disabled safety guard: use search_courses instead to avoid loading the full Moodle course database.",
+            "parameters": {
+                "properties": {},
+                "title": "get_coursesArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "get_course_contents",
+            "description": "Get course metadata plus the contents and structure of a specific course.",
+            "parameters": {
+                "properties": {
+                    "courseid": {
+                        "title": "Courseid",
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "courseid"
+                ],
+                "title": "get_course_contentsArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "get_course_name",
+            "description": "Get the display name/fullname for a specific Moodle course id.",
+            "parameters": {
+                "properties": {
+                    "courseid": {
+                        "title": "Courseid",
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "courseid"
+                ],
+                "title": "get_course_nameArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "get_course_details",
+            "description": "Get detailed Moodle course metadata for a specific course id.",
+            "parameters": {
+                "properties": {
+                    "courseid": {
+                        "title": "Courseid",
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "courseid"
+                ],
+                "title": "get_course_detailsArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "get_course_participants",
+            "description": "Get participants enrolled in a specific course, limited to avoid very large responses.",
+            "parameters": {
+                "properties": {
+                    "courseid": {
+                        "title": "Courseid",
+                        "type": "integer"
+                    },
+                    "limit": {
+                        "default": 50,
+                        "title": "Limit",
+                        "type": "integer"
+                    },
+                    "offset": {
+                        "default": 0,
+                        "title": "Offset",
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "courseid"
+                ],
+                "title": "get_course_participantsArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "check_user_in_course",
+            "description": "Check whether a specific Moodle user is enrolled/participating in a specific course.",
+            "parameters": {
+                "properties": {
+                    "courseid": {
+                        "title": "Courseid",
+                        "type": "integer"
+                    },
+                    "userid": {
+                        "title": "Userid",
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "courseid",
+                    "userid"
+                ],
+                "title": "check_user_in_courseArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "get_user_by_id",
+            "description": "Get Moodle user profile information for a specific user id.",
+            "parameters": {
+                "properties": {
+                    "userid": {
+                        "title": "Userid",
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "userid"
+                ],
+                "title": "get_user_by_idArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "get_user_by_username",
+            "description": "Get Moodle user profile information by exact username, such as the CRM member identifier.",
+            "parameters": {
+                "properties": {
+                    "username": {
+                        "title": "Username",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "username"
+                ],
+                "title": "get_user_by_usernameArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "get_member_by_username",
+            "description": "Get a Moodle member by exact CRM/member username.",
+            "parameters": {
+                "properties": {
+                    "username": {
+                        "title": "Username",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "username"
+                ],
+                "title": "get_member_by_usernameArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "get_member_by_id",
+            "description": "Get a Moodle member by CRM/member id.",
+            "parameters": {
+                "properties": {
+                    "member_id": {
+                        "title": "Member Id",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "member_id"
+                ],
+                "title": "get_member_by_idArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "get_user_by_email",
+            "description": "Get Moodle user profile information by exact email address.",
+            "parameters": {
+                "properties": {
+                    "email": {
+                        "title": "Email",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "email"
+                ],
+                "title": "get_user_by_emailArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "search_users",
+            "description": "\n    Search Moodle users by username/member id, name, email, idnumber, or id.\n\n    Valid fields depend on Moodle permissions, but username is the CRM-friendly default.\n    ",
+            "parameters": {
+                "properties": {
+                    "query": {
+                        "title": "Query",
+                        "type": "string"
+                    },
+                    "field": {
+                        "default": "username",
+                        "title": "Field",
+                        "type": "string"
+                    },
+                    "limit": {
+                        "default": 25,
+                        "title": "Limit",
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "query"
+                ],
+                "title": "search_usersArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "find_users_by_name",
+            "description": "Find Moodle users by firstname and lastname.",
+            "parameters": {
+                "properties": {
+                    "firstname": {
+                        "title": "Firstname",
+                        "type": "string"
+                    },
+                    "lastname": {
+                        "title": "Lastname",
+                        "type": "string"
+                    },
+                    "limit": {
+                        "default": 25,
+                        "title": "Limit",
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "firstname",
+                    "lastname"
+                ],
+                "title": "find_users_by_nameArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "lookup_person",
+            "description": "\n    Look up a Moodle person by user id, username/member id, email, or full name.\n\n    This is intended for natural LLM use when the user says something like\n    \"Aaron Beal\" or \"member 240789\".\n    ",
+            "parameters": {
+                "properties": {
+                    "identifier": {
+                        "title": "Identifier",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "identifier"
+                ],
+                "title": "lookup_personArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "get_user_courses",
+            "description": "Get courses a specific Moodle user is enrolled in.",
+            "parameters": {
+                "properties": {
+                    "userid": {
+                        "title": "Userid",
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "userid"
+                ],
+                "title": "get_user_coursesArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "get_course_instructors",
+            "description": "\n    Get instructor details for a specific course.\n\n    Matches role shortnames from MOODLE_INSTRUCTOR_ROLES (comma-separated),\n    defaulting to editingteacher, teacher, and instructor. Returned contact\n    fields depend on what the Moodle web service token is allowed to see.\n    ",
+            "parameters": {
+                "properties": {
+                    "courseid": {
+                        "title": "Courseid",
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "courseid"
+                ],
+                "title": "get_course_instructorsArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "get_user_instructors",
+            "description": "\n    Get instructor details grouped by every course a Moodle user is enrolled in.\n\n    Use get_user_by_username first when starting from a CRM/member id.\n    ",
+            "parameters": {
+                "properties": {
+                    "userid": {
+                        "title": "Userid",
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "userid"
+                ],
+                "title": "get_user_instructorsArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "get_member_profile_and_courses",
+            "description": "Get a Moodle member profile by CRM/member username and include enrolled courses and instructors.",
+            "parameters": {
+                "properties": {
+                    "username": {
+                        "title": "Username",
+                        "type": "string"
+                    },
+                    "include_instructors": {
+                        "default": true,
+                        "title": "Include Instructors",
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "username"
+                ],
+                "title": "get_member_profile_and_coursesArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "get_user_registration_history",
+            "description": "\n    Get a Moodle user's registration history: every course they are enrolled in,\n    with course completion status/date where course completion tracking is enabled.\n\n    Moodle does not expose an enrollment timestamp via standard web services, so\n    entries are ordered by course start date as a chronological approximation.\n    ",
+            "parameters": {
+                "properties": {
+                    "userid": {
+                        "title": "Userid",
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "userid"
+                ],
+                "title": "get_user_registration_historyArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "get_member_registration_history",
+            "description": "Get a Moodle member's registration history by CRM/member username.",
+            "parameters": {
+                "properties": {
+                    "username": {
+                        "title": "Username",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "username"
+                ],
+                "title": "get_member_registration_historyArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "lookup_member_course_status",
+            "description": "Check whether a member/user is enrolled in a course, accepting member id, user id, email, or full name.",
+            "parameters": {
+                "properties": {
+                    "member_or_user": {
+                        "title": "Member Or User",
+                        "type": "string"
+                    },
+                    "courseid": {
+                        "title": "Courseid",
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "member_or_user",
+                    "courseid"
+                ],
+                "title": "lookup_member_course_statusArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "check_member_in_course",
+            "description": "Check whether a CRM/member id is enrolled in a Moodle course.",
+            "parameters": {
+                "properties": {
+                    "member_id": {
+                        "title": "Member Id",
+                        "type": "string"
+                    },
+                    "courseid": {
+                        "title": "Courseid",
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "member_id",
+                    "courseid"
+                ],
+                "title": "check_member_in_courseArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "check_student_registration",
+            "description": "Check whether a student name is registered/enrolled in a CRM class/Moodle course.",
+            "parameters": {
+                "properties": {
+                    "student_name": {
+                        "title": "Student Name",
+                        "type": "string"
+                    },
+                    "class_name_or_id": {
+                        "title": "Class Name Or Id",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "student_name",
+                    "class_name_or_id"
+                ],
+                "title": "check_student_registrationArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "get_assignments",
+            "description": "Get assignments from one or more courses.",
+            "parameters": {
+                "properties": {
+                    "courseids": {
+                        "items": {
+                            "type": "integer"
+                        },
+                        "title": "Courseids",
+                        "type": "array"
+                    }
+                },
+                "required": [
+                    "courseids"
+                ],
+                "title": "get_assignmentsArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "get_user_grades",
+            "description": "Get grade information for a user in a course. Use userid=0 for the current user.",
+            "parameters": {
+                "properties": {
+                    "courseid": {
+                        "title": "Courseid",
+                        "type": "integer"
+                    },
+                    "userid": {
+                        "default": 0,
+                        "title": "Userid",
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "courseid"
+                ],
+                "title": "get_user_gradesArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "search_courses",
+            "description": "Search for courses by text, or pass a numeric course id to get exact course details.",
+            "parameters": {
+                "properties": {
+                    "search": {
+                        "title": "Search",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "search"
+                ],
+                "title": "search_coursesArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "search_classes",
+            "description": "Search CRM class names by mapping them to Moodle course search.",
+            "parameters": {
+                "properties": {
+                    "class_name": {
+                        "title": "Class Name",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "class_name"
+                ],
+                "title": "search_classesArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "get_class_details",
+            "description": "\n    Get Moodle course details using a CRM class name or Moodle course id.\n\n    Text searches only populate exact_match when exactly one course matches, or\n    exactly one result has an id/shortname/fullname that equals the input\n    verbatim. Otherwise the caller must disambiguate using the returned matches.\n    ",
+            "parameters": {
+                "properties": {
+                    "class_name_or_id": {
+                        "title": "Class Name Or Id",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "class_name_or_id"
+                ],
+                "title": "get_class_detailsArguments",
+                "type": "object"
+            }
+        },
+        {
+            "name": "get_course_content_by_name_or_id",
+            "description": "\n    Get a Moodle course's full contents/structure by CRM class name or course id.\n\n    Text names are resolved the same way as get_class_details: content is only\n    fetched when there is a single/exact course match, otherwise the candidate\n    matches are returned so the caller can disambiguate instead of guessing.\n    ",
+            "parameters": {
+                "properties": {
+                    "class_name_or_id": {
+                        "title": "Class Name Or Id",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "class_name_or_id"
+                ],
+                "title": "get_course_content_by_name_or_idArguments",
+                "type": "object"
+            }
+        }
+    ],
+    "runtimes": [
+        {
+            "type": "RemoteMCPServer",
+            "spec": {
+                "url": "https://moodle-mcp.orangemushroom-693af788.canadacentral.azurecontainerapps.io/mcp"
+            },
+            "run_for_functions": [
+                "*"
+            ],
+            "auth": {
+                "type": "None"
+            }
+        }
+    ]
+}

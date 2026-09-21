@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "moodle": {
+      "command": "C:/Users/Dan/moodle-mcp/start-moodle-mcp.cmd",
+      "args": []
+    },
+    "moodle-remote": {
+      "type": "streamable-http",
+      "url": "https://moodle-mcp.orangemushroom-693af788.canadacentral.azurecontainerapps.io/mcp"
+    }
+  }
+}
